@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Scoreboard Administration</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3f37c9;
+      --accent: #4895ef;
+      --background: #f8f9fa;
+      --text: #212529;
+      --light-gray: #e9ecef;
+      --medium-gray: #ced4da;
+      --dark-gray: #6c757d;
+      --success: #06d6a0;
+      --warning: #ffd166;
+      --danger: #ef476f;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1, h2 {
+      margin-bottom: 20px;
+    }
+    
+    .scoreboard-section {
+      margin-bottom: 40px;
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--medium-gray);
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: var(--secondary);
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background-color: var(--dark-gray);
+      color: white;
+      border-radius: 10px;
+    }
+    
+    /* Hide admin controls by default until successful login */
+    #admin-controls {
+      display: none;
+    }
+    
+    /* Login section styling */
+    #login-section {
+      margin-bottom: 40px;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    
+    #login-section input {
+      width: 50%;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Admin Panel</h1>
+      <p>Score Update & Event Administration</p>
+    </header>
+    
+    <!-- Login Section -->
+    <div id="login-section">
+      <h2>Admin Login</h2>
+      <p>Please enter the admin password to access the controls:</p>
+      <input type="password" id="admin-password" placeholder="Enter admin password" />
+      <button id="admin-login-btn">Login</button>
+    </div>
+    
+    <!-- Administrative Controls (hidden until login) -->
+    <div id="admin-controls">
+      <div class="scoreboard-section">
+        <h2>Update Team Scores</h2>
+        <div class="form-group">
+          <label for="team-select">Select Team:</label>
+          <select id="team-select">
+            <option value="Team A">Team A</option>
+            <option value="Team B">Team B</option>
+            <option value="Team C">Team C</option>
+            <option value="Team D">Team D</option>
+            <option value="Team E">Team E</option>
+            <option value="Team F">Team F</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="score-input">New Total Score:</label>
+          <input type="number" id="score-input" min="0" />
+        </div>
+        <button id="update-score">Update Score</button>
+      </div>
+      
+      <div class="scoreboard-section">
+        <h2>Add Completed Event</h2>
+        <div class="form-group">
+          <label for="event-name">Event Name:</label>
+          <input type="text" id="event-name" />
+        </div>
+        <div class="form-group">
+          <label for="first-place">1st Place:</label>
+          <select id="first-place">
+            <option value="Team A">Team A</option>
+            <option value="Team B">Team B</option>
+            <option value="Team C">Team C</option>
+            <option value="Team D">Team D</option>
+            <option value="Team E">Team E</option>
+            <option value="Team F">Team F</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="second-place">2nd Place:</label>
+          <select id="second-place">
+            <option value="Team A">Team A</option>
+            <option value="Team B">Team B</option>
+            <option value="Team C">Team C</option>
+            <option value="Team D">Team D</option>
+            <option value="Team E">Team E</option>
+            <option value="Team F">Team F</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="third-place">3rd Place:</label>
+          <select id="third-place">
+            <option value="Team A">Team A</option>
+            <option value="Team B">Team B</option>
+            <option value="Team C">Team C</option>
+            <option value="Team D">Team D</option>
+            <option value="Team E">Team E</option>
+            <option value="Team F">Team F</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="event-date">Date:</label>
+          <input type="date" id="event-date" />
+        </div>
+        <button id="add-event">Add Event</button>
+      </div>
+    </div>
+    
+    <button onclick="window.location.href='index.html'">Back to Main Page</button>
+  </div>
+
+  <footer>
+    <p>Championship Scoreboard System Admin Panel &copy; 2025</p>
+  </footer>
+
+  <script>
+    // Simple admin login using a fixed password
+    document.getElementById('admin-login-btn').addEventListener('click', function () {
+      const enteredPassword = document.getElementById('admin-password').value;
+      const adminPassword = "admin123"; // Change or secure this as needed
+
+      if (enteredPassword === adminPassword) {
+        // Hide login section and display admin controls
+        document.getElementById('login-section').style.display = "none";
+        document.getElementById('admin-controls').style.display = "block";
+      } else {
+        alert("Incorrect password. Please try again.");
+      }
+    });
+
+    // Dummy initialization for demonstration purposes
+    const teamNames = ['Team A', 'Team B', 'Team C', 'Team D', 'Team E', 'Team F'];
+    // Sample initial scores (these can be pulled from a backend or shared storage in a real application)
+    let scores = teamNames.map(() => Math.floor(Math.random() * 90) + 10);
+
+    // Update score functionality
+    document.getElementById('update-score').addEventListener('click', function() {
+      const teamSelect = document.getElementById('team-select');
+      const scoreInput = document.getElementById('score-input');
+      const teamIndex = teamNames.indexOf(teamSelect.value);
+      const newScore = parseInt(scoreInput.value);
+
+      if (!isNaN(newScore) && teamIndex !== -1) {
+        scores[teamIndex] = newScore;
+        alert(`Updated ${teamSelect.value} score to ${newScore} points!`);
+        scoreInput.value = "";
+      } else {
+        alert("Please enter a valid score");
+      }
+    });
+
+    // Add event functionality
+    document.getElementById('add-event').addEventListener('click', function() {
+      const eventName = document.getElementById('event-name').value;
+      const firstPlace = document.getElementById('first-place').value;
+      const secondPlace = document.getElementById('second-place').value;
+      const thirdPlace = document.getElementById('third-place').value;
+      const eventDate = document.getElementById('event-date').value;
+
+      if (eventName && firstPlace && secondPlace && thirdPlace && eventDate) {
+        if (firstPlace === secondPlace || firstPlace === thirdPlace || secondPlace === thirdPlace) {
+          alert("Please select different teams for each placement");
+          return;
+        }
+        alert("Event added successfully!");
+        // Reset fields for demonstration (in a real application, update your event data accordingly)
+        document.getElementById('event-name').value = "";
+        document.getElementById('event-date').value = "";
+      } else {
+        alert("Please fill in all fields");
+      }
+    });
+  </script>
+</body>
+</html>
