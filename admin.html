@@ -4,123 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel - Scoreboard Administration</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
   <style>
+    /* Basic styling */
     :root {
       --primary: #4361ee;
       --secondary: #3f37c9;
-      --accent: #4895ef;
       --background: #f8f9fa;
       --text: #212529;
-      --light-gray: #e9ecef;
-      --medium-gray: #ced4da;
       --dark-gray: #6c757d;
-      --success: #06d6a0;
-      --warning: #ffd166;
-      --danger: #ef476f;
     }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    body {
-      background-color: var(--background);
-      color: var(--text);
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 40px;
-      padding: 20px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-    
-    h1, h2 {
-      margin-bottom: 20px;
-    }
-    
-    .scoreboard-section {
-      margin-bottom: 40px;
-      background-color: white;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    }
-    
-    .form-group {
-      margin-bottom: 15px;
-    }
-    
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--medium-gray);
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    
-    button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-    }
-    
-    button:hover {
-      background-color: var(--secondary);
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      padding: 20px;
-      background-color: var(--dark-gray);
-      color: white;
-      border-radius: 10px;
-    }
-    
-    /* Hide admin controls by default until successful login */
-    #admin-controls {
-      display: none;
-    }
-    
-    /* Login section styling */
-    #login-section {
-      margin-bottom: 40px;
-      background-color: #fff;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-    
-    #login-section input {
-      width: 50%;
-      margin-bottom: 15px;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+    body { background: var(--background); color: var(--text); padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 40px; padding: 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 10px; }
+    h1, h2 { margin-bottom: 20px; }
+    .scoreboard-section { margin-bottom: 40px; background: white; padding: 25px; border-radius: 10px; }
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: bold; margin-bottom: 5px; }
+    select, input { width: 100%; padding: 10px; margin-bottom: 10px; }
+    button { background: var(--primary); color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    footer { text-align: center; margin-top: 40px; padding: 20px; background: var(--dark-gray); color: white; border-radius: 10px; }
   </style>
 </head>
 <body>
@@ -129,84 +32,62 @@
       <h1>Admin Panel</h1>
       <p>Score Update & Event Administration</p>
     </header>
-    
+
     <!-- Login Section -->
     <div id="login-section">
       <h2>Admin Login</h2>
-      <p>Please enter the admin password to access the controls:</p>
+      <p>Please enter the admin password:</p>
       <input type="password" id="admin-password" placeholder="Enter admin password" />
       <button id="admin-login-btn">Login</button>
     </div>
-    
-    <!-- Administrative Controls (hidden until login) -->
-    <div id="admin-controls">
-      <div class="scoreboard-section">
-        <h2>Update Team Scores</h2>
-        <div class="form-group">
-          <label for="team-select">Select Team:</label>
-          <select id="team-select">
-            <option value="Team A">Team A</option>
-            <option value="Team B">Team B</option>
-            <option value="Team C">Team C</option>
-            <option value="Team D">Team D</option>
-            <option value="Team E">Team E</option>
-            <option value="Team F">Team F</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="score-input">New Total Score:</label>
-          <input type="number" id="score-input" min="0" />
-        </div>
-        <button id="update-score">Update Score</button>
-      </div>
-      
+
+    <!-- Admin Controls -->
+    <div id="admin-controls" style="display:none;">
       <div class="scoreboard-section">
         <h2>Add Completed Event</h2>
         <div class="form-group">
-          <label for="event-name">Event Name:</label>
-          <input type="text" id="event-name" />
-        </div>
-        <div class="form-group">
-          <label for="first-place">1st Place:</label>
-          <select id="first-place">
-            <option value="Team A">Team A</option>
-            <option value="Team B">Team B</option>
-            <option value="Team C">Team C</option>
-            <option value="Team D">Team D</option>
-            <option value="Team E">Team E</option>
-            <option value="Team F">Team F</option>
+          <label for="event-select">Select Event:</label>
+          <select id="event-select">
+            <!-- Options populated from data.php -->
           </select>
         </div>
         <div class="form-group">
-          <label for="second-place">2nd Place:</label>
-          <select id="second-place">
-            <option value="Team A">Team A</option>
-            <option value="Team B">Team B</option>
-            <option value="Team C">Team C</option>
-            <option value="Team D">Team D</option>
-            <option value="Team E">Team E</option>
-            <option value="Team F">Team F</option>
+          <label for="firstTeam">1st Place (Team):</label>
+          <select id="firstTeam">
+            <option value="Alligators">Alligators</option>
+            <option value="Bobcats">Bobcats</option>
+            <option value="Cheetahs">Cheetahs</option>
+            <option value="Dragons">Dragons</option>
+            <option value="Eagles">Eagles</option>
+            <option value="Foxes">Foxes</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="third-place">3rd Place:</label>
-          <select id="third-place">
-            <option value="Team A">Team A</option>
-            <option value="Team B">Team B</option>
-            <option value="Team C">Team C</option>
-            <option value="Team D">Team D</option>
-            <option value="Team E">Team E</option>
-            <option value="Team F">Team F</option>
+          <label for="secondTeam">2nd Place (Team):</label>
+          <select id="secondTeam">
+            <option value="Alligators">Alligators</option>
+            <option value="Bobcats">Bobcats</option>
+            <option value="Cheetahs">Cheetahs</option>
+            <option value="Dragons">Dragons</option>
+            <option value="Eagles">Eagles</option>
+            <option value="Foxes">Foxes</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="event-date">Date:</label>
-          <input type="date" id="event-date" />
+          <label for="thirdTeam">3rd Place (Team):</label>
+          <select id="thirdTeam">
+            <option value="Alligators">Alligators</option>
+            <option value="Bobcats">Bobcats</option>
+            <option value="Cheetahs">Cheetahs</option>
+            <option value="Dragons">Dragons</option>
+            <option value="Eagles">Eagles</option>
+            <option value="Foxes">Foxes</option>
+          </select>
         </div>
-        <button id="add-event">Add Event</button>
+        <button id="submit-event">Submit Completed Event</button>
       </div>
     </div>
-    
+
     <button onclick="window.location.href='index.html'">Back to Main Page</button>
   </div>
 
@@ -215,62 +96,95 @@
   </footer>
 
   <script>
-    // Simple admin login using a fixed password
-    document.getElementById('admin-login-btn').addEventListener('click', function () {
-      const enteredPassword = document.getElementById('admin-password').value;
-      const adminPassword = "admin123"; // Change or secure this as needed
+    const teamNames = ['Alligators', 'Bobcats', 'Cheetahs', 'Dragons', 'Eagles', 'Foxes'];
+    const dataURL = 'data.php';
 
-      if (enteredPassword === adminPassword) {
-        // Hide login section and display admin controls
-        document.getElementById('login-section').style.display = "none";
-        document.getElementById('admin-controls').style.display = "block";
+    // Simple admin login
+    document.getElementById('admin-login-btn').addEventListener('click', () => {
+      const pwd = document.getElementById('admin-password').value;
+      if (pwd === 'admin123') {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('admin-controls').style.display = 'block';
+        populateEventDropdown();
       } else {
-        alert("Incorrect password. Please try again.");
+        alert('Incorrect password. Please try again.');
       }
     });
 
-    // Dummy initialization for demonstration purposes
-    const teamNames = ['Team A', 'Team B', 'Team C', 'Team D', 'Team E', 'Team F'];
-    // Sample initial scores (these can be pulled from a backend or shared storage in a real application)
-    let scores = teamNames.map(() => Math.floor(Math.random() * 90) + 10);
-
-    // Update score functionality
-    document.getElementById('update-score').addEventListener('click', function() {
-      const teamSelect = document.getElementById('team-select');
-      const scoreInput = document.getElementById('score-input');
-      const teamIndex = teamNames.indexOf(teamSelect.value);
-      const newScore = parseInt(scoreInput.value);
-
-      if (!isNaN(newScore) && teamIndex !== -1) {
-        scores[teamIndex] = newScore;
-        alert(`Updated ${teamSelect.value} score to ${newScore} points!`);
-        scoreInput.value = "";
+    // Populate the event dropdown by reading the upcoming events from the server
+    async function populateEventDropdown() {
+      const response = await fetch(dataURL);
+      const data = await response.json();
+      const eventSelect = document.getElementById('event-select');
+      eventSelect.innerHTML = '';
+      if (data.upcomingEvents && data.upcomingEvents.length > 0) {
+        data.upcomingEvents.forEach(ev => {
+          const option = document.createElement('option');
+          option.value = ev.name;
+          option.textContent = ev.name;
+          eventSelect.appendChild(option);
+        });
       } else {
-        alert("Please enter a valid score");
+        eventSelect.innerHTML = '<option>No upcoming events</option>';
+        document.getElementById('submit-event').disabled = true;
       }
-    });
+    }
 
-    // Add event functionality
-    document.getElementById('add-event').addEventListener('click', function() {
-      const eventName = document.getElementById('event-name').value;
-      const firstPlace = document.getElementById('first-place').value;
-      const secondPlace = document.getElementById('second-place').value;
-      const thirdPlace = document.getElementById('third-place').value;
-      const eventDate = document.getElementById('event-date').value;
+    // When the admin submits the completed event
+    document.getElementById('submit-event').addEventListener('click', async () => {
+      const selectedEvent = document.getElementById('event-select').value;
+      const firstTeam = document.getElementById('firstTeam').value;
+      const secondTeam = document.getElementById('secondTeam').value;
+      const thirdTeam = document.getElementById('thirdTeam').value;
 
-      if (eventName && firstPlace && secondPlace && thirdPlace && eventDate) {
-        if (firstPlace === secondPlace || firstPlace === thirdPlace || secondPlace === thirdPlace) {
-          alert("Please select different teams for each placement");
-          return;
-        }
-        alert("Event added successfully!");
-        // Reset fields for demonstration (in a real application, update your event data accordingly)
-        document.getElementById('event-name').value = "";
-        document.getElementById('event-date').value = "";
-      } else {
-        alert("Please fill in all fields");
+      // Ensure teams are distinct
+      if (firstTeam === secondTeam || firstTeam === thirdTeam || secondTeam === thirdTeam) {
+        alert("Please choose three different teams for 1st, 2nd, and 3rd places.");
+        return;
       }
+
+      // Fetch the current data
+      const response = await fetch(dataURL);
+      const data = await response.json();
+
+      // Find the event object in upcomingEvents
+      const eventIndex = data.upcomingEvents.findIndex(ev => ev.name === selectedEvent);
+      if (eventIndex === -1) {
+        alert("Event not found.");
+        return;
+      }
+      const eventObj = data.upcomingEvents[eventIndex];
+
+      // Update the scores for the teams
+      const firstIndex = teamNames.indexOf(firstTeam);
+      const secondIndex = teamNames.indexOf(secondTeam);
+      const thirdIndex = teamNames.indexOf(thirdTeam);
+      data.scores[firstIndex] += eventObj.first;
+      data.scores[secondIndex] += eventObj.second;
+      data.scores[thirdIndex] += eventObj.third;
+
+      // Add the completed event to the completedEvents array
+      data.completedEvents.push({
+        event: selectedEvent,
+        first: firstTeam,
+        second: secondTeam,
+        third: thirdTeam
+      });
+
+      // Remove the event from upcomingEvents
+      data.upcomingEvents.splice(eventIndex, 1);
+
+      // Push the updated data back to the server (via POST)
+      await fetch(dataURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      alert(`Event "${selectedEvent}" has been recorded and scores updated.`);
+      window.location.href = 'index.html';
     });
   </script>
 </body>
 </html>
+
