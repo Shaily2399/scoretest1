@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Event Championship Scoreboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>O-week Section Wars Co26 Scoreboard</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
   <style>
     :root {
@@ -19,25 +19,21 @@
       --warning: #ffd166;
       --danger: #ef476f;
     }
-    
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    
     body {
       background-color: var(--background);
       color: var(--text);
       padding: 20px;
     }
-    
     .container {
       max-width: 1200px;
       margin: 0 auto;
     }
-    
     header {
       text-align: center;
       margin-bottom: 40px;
@@ -47,14 +43,12 @@
       border-radius: 10px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
-    
     h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
       text-transform: uppercase;
       letter-spacing: 2px;
     }
-    
     h2 {
       font-size: 1.8rem;
       margin-bottom: 20px;
@@ -62,7 +56,6 @@
       border-bottom: 2px solid var(--primary);
       padding-bottom: 10px;
     }
-    
     .scoreboard-section {
       margin-bottom: 40px;
       background-color: white;
@@ -70,14 +63,12 @@
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     }
-    
     /* Chart container styling */
     .chart-container {
       position: relative;
       height: 350px;
       margin-bottom: 20px;
     }
-    
     /* Table styling */
     table {
       width: 100%;
@@ -85,13 +76,11 @@
       margin-top: 20px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
-    
     th, td {
       padding: 12px 15px;
       text-align: left;
       border-bottom: 1px solid var(--light-gray);
     }
-    
     th {
       background-color: var(--primary);
       color: white;
@@ -100,15 +89,12 @@
       font-size: 0.9rem;
       letter-spacing: 1px;
     }
-    
     tr:nth-child(even) {
       background-color: var(--light-gray);
     }
-    
     tr:hover {
       background-color: rgba(67, 97, 238, 0.1);
     }
-    
     /* Medal colors */
     .gold {
       background-color: #FFD700;
@@ -117,7 +103,6 @@
       padding: 3px 8px;
       font-weight: bold;
     }
-    
     .silver {
       background-color: #C0C0C0;
       color: black;
@@ -125,7 +110,6 @@
       padding: 3px 8px;
       font-weight: bold;
     }
-    
     .bronze {
       background-color: #CD7F32;
       color: white;
@@ -133,7 +117,6 @@
       padding: 3px 8px;
       font-weight: bold;
     }
-    
     .team-color {
       display: inline-block;
       width: 15px;
@@ -141,14 +124,13 @@
       border-radius: 50%;
       margin-right: 8px;
     }
-    
-    .team-A { background-color: #FF6384; }
-    .team-B { background-color: #36A2EB; }
-    .team-C { background-color: #FFCE56; }
-    .team-D { background-color: #4BC0C0; }
-    .team-E { background-color: #9966FF; }
-    .team-F { background-color: #FF9F40; }
-    
+    /* Assign some distinct colors to each new team name */
+    .team-Alligators { background-color: #FF6384; }
+    .team-Bobcats { background-color: #36A2EB; }
+    .team-Cheetahs { background-color: #FFCE56; }
+    .team-Dragons { background-color: #4BC0C0; }
+    .team-Eagles { background-color: #9966FF; }
+    .team-Foxes { background-color: #FF9F40; }
     footer {
       text-align: center;
       margin-top: 40px;
@@ -157,7 +139,6 @@
       color: white;
       border-radius: 10px;
     }
-    
     /* Admin access button styling */
     .admin-button {
       margin-top: 20px;
@@ -170,7 +151,6 @@
       font-size: 16px;
       transition: background-color 0.3s;
     }
-    
     .admin-button:hover {
       background-color: var(--secondary);
     }
@@ -179,18 +159,36 @@
 <body>
   <div class="container">
     <header>
-      <h1>Championship Scoreboard</h1>
-      <p>Week-long Multi-event Competition</p>
+      <!-- 1) New Title -->
+      <h1>O-week Section Wars Co26 Scoreboard</h1>
+      <!-- 2) Subheading removed -->
     </header>
+    
+    <!-- 3) New scoreboard section for displaying current rank BEFORE overall standings -->
+    <div class="scoreboard-section">
+      <h2>Current Team Ranks</h2>
+      <table id="rank-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Will be populated dynamically -->
+        </tbody>
+      </table>
+    </div>
     
     <div class="scoreboard-section">
       <h2>Overall Team Standings</h2>
       <div class="chart-container">
         <canvas id="overallScores"></canvas>
       </div>
-      <!-- Public viewers see only the chart and not the score update controls -->
     </div>
     
+    <!-- 5) Completed Events section is now empty (no sample data). Also date column removed. -->
     <div class="scoreboard-section">
       <h2>Completed Events Results</h2>
       <table id="results-table">
@@ -200,31 +198,28 @@
             <th>1st Place</th>
             <th>2nd Place</th>
             <th>3rd Place</th>
-            <th>Date</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Sample data, this will be populated dynamically -->
+          <!-- Initially empty; admins will add via admin page. -->
         </tbody>
       </table>
     </div>
     
+    <!-- 6 & 7) Updated upcoming events (no date/time columns), using provided info -->
     <div class="scoreboard-section">
       <h2>Upcoming Events Schedule & Points</h2>
       <table id="schedule-table">
         <thead>
           <tr>
             <th>Event Name</th>
-            <th>Date</th>
-            <th>Time</th>
             <th>1st Place Points</th>
             <th>2nd Place Points</th>
             <th>3rd Place Points</th>
-            <th>Participation Points</th>
           </tr>
         </thead>
         <tbody>
-          <!-- This will be populated with sample data -->
+          <!-- Populated from your attached event info -->
         </tbody>
       </table>
     </div>
@@ -232,26 +227,34 @@
 
   <footer>
     <p>Championship Scoreboard System &copy; 2025</p>
-    <!-- Button to access the hidden admin page -->
+    <!-- Button to access the hidden admin page (or wherever you placed admin controls) -->
     <button class="admin-button" onclick="window.location.href='admin.html'">Admin Login</button>
   </footer>
 
   <script>
-    // Initialize chart with random data
-    const teamNames = ['Team A', 'Team B', 'Team C', 'Team D', 'Team E', 'Team F'];
-    const teamColors = [
-      'rgba(255, 99, 132, 0.8)',
-      'rgba(54, 162, 235, 0.8)',
-      'rgba(255, 206, 86, 0.8)',
-      'rgba(75, 192, 192, 0.8)',
-      'rgba(153, 102, 255, 0.8)',
-      'rgba(255, 159, 64, 0.8)'
+    // 4) New team names
+    const teamNames = [
+      'Alligators',
+      'Bobcats',
+      'Cheetahs',
+      'Dragons',
+      'Eagles',
+      'Foxes'
     ];
-    
-    // Random scores between 10 and 100 for demonstration
-    let scores = teamNames.map(() => Math.floor(Math.random() * 90) + 10);
-    
-    // Create horizontal bar chart for overall scores
+    // Example random scores for demonstration (0 to 100)
+    let scores = teamNames.map(() => Math.floor(Math.random() * 101));
+
+    // Team color mapping
+    const teamColors = [
+      'rgba(255, 99, 132, 0.8)',   // Alligators
+      'rgba(54, 162, 235, 0.8)',  // Bobcats
+      'rgba(255, 206, 86, 0.8)',  // Cheetahs
+      'rgba(75, 192, 192, 0.8)',  // Dragons
+      'rgba(153, 102, 255, 0.8)', // Eagles
+      'rgba(255, 159, 64, 0.8)'   // Foxes
+    ];
+
+    // Create bar chart for overall scores
     const ctx = document.getElementById('overallScores').getContext('2d');
     let scoresChart = new Chart(ctx, {
       type: 'bar',
@@ -261,7 +264,7 @@
           label: 'Total Points',
           data: scores,
           backgroundColor: teamColors,
-          borderColor: teamColors.map(color => color.replace('0.8', '1')),
+          borderColor: teamColors.map(c => c.replace('0.8', '1')),
           borderWidth: 1
         }]
       },
@@ -298,109 +301,83 @@
         }
       }
     });
-    
-    // Sample data for completed events
-    const completedEvents = [
-      { event: "Opening Challenge", first: "Team C", second: "Team A", third: "Team F", date: "2025-04-08" },
-      { event: "Relay Race", first: "Team B", second: "Team E", third: "Team D", date: "2025-04-09" },
-      { event: "Puzzle Solving", first: "Team A", second: "Team F", third: "Team C", date: "2025-04-10" }
-    ];
-    
-    // Populate completed events table
-    function updateEventsTable() {
+
+    // 5) Completed events array is empty (you will add them via admin page)
+    const completedEvents = [];
+
+    // Populate completed events table (starts empty)
+    function updateCompletedEventsTable() {
       const tableBody = document.querySelector('#results-table tbody');
       tableBody.innerHTML = '';
-      
-      completedEvents.forEach(event => {
+      completedEvents.forEach(ev => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${event.event}</td>
-          <td><span class="team-color team-${event.first.split(' ')[1]}"></span><span class="gold">${event.first}</span></td>
-          <td><span class="team-color team-${event.second.split(' ')[1]}"></span><span class="silver">${event.second}</span></td>
-          <td><span class="team-color team-${event.third.split(' ')[1]}"></span><span class="bronze">${event.third}</span></td>
-          <td>${formatDate(event.date)}</td>
+          <td>${ev.event}</td>
+          <td><span class="team-color team-${ev.first}"></span><span class="gold">${ev.first}</span></td>
+          <td><span class="team-color team-${ev.second}"></span><span class="silver">${ev.second}</span></td>
+          <td><span class="team-color team-${ev.third}"></span><span class="bronze">${ev.third}</span></td>
         `;
         tableBody.appendChild(row);
       });
     }
-    
-    // Format date nicely
-    function formatDate(dateString) {
-      const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-      return new Date(dateString).toLocaleDateString(undefined, options);
-    }
-    
-    // Sample data for upcoming events
+
+    // 7) Replace old upcoming events with your new set (no date/time columns)
     const upcomingEvents = [
-      {
-        name: "Team Strategy Challenge",
-        date: "2025-04-14",
-        time: "10:00 AM",
-        first: 15,
-        second: 10,
-        third: 5,
-        participation: 2
-      },
-      {
-        name: "Obstacle Course",
-        date: "2025-04-15",
-        time: "2:00 PM",
-        first: 20,
-        second: 15,
-        third: 10,
-        participation: 3
-      },
-      {
-        name: "Knowledge Quiz",
-        date: "2025-04-16",
-        time: "11:00 AM",
-        first: 15,
-        second: 10,
-        third: 5,
-        participation: 2
-      },
-      {
-        name: "Creative Challenge",
-        date: "2025-04-17",
-        time: "3:30 PM",
-        first: 25,
-        second: 15,
-        third: 10,
-        participation: 5
-      },
-      {
-        name: "Final Championship Challenge",
-        date: "2025-04-18",
-        time: "2:00 PM",
-        first: 30,
-        second: 20,
-        third: 10,
-        participation: 5
-      }
+      { name: "LCA",                   first: 300, second: 200, third: 100 },
+      { name: "Section Carnival Stalls",first: 300, second: 200, third: 100 },
+      { name: "Shark Sank",            first: 300, second: 200, third: 100 },
+      { name: "Football",              first: 250, second: 150, third: 100 },
+      { name: "Frisbee",               first: 250, second: 150, third: 100 },
+      { name: "Handball",              first: 250, second: 150, third: 100 },
+      { name: "Meme Wars",             first: 200, second: 150, third: 100 },
+      { name: "Canvas Painting",       first: 200, second: 150, third: 100 },
+      { name: "Case Comp - Prod",      first: 200, second: 100, third: 50 },
+      { name: "Case Comp - Fin",       first: 200, second: 100, third: 50 },
+      { name: "Case Comp - Mktg",      first: 200, second: 100, third: 50 },
+      { name: "Pass the Talent Baton", first: 150, second: 100, third: 50 },
+      { name: "Photography Contest",   first: 150, second: 100, third: 50 }
     ];
-    
+
     // Populate upcoming events table
     function populateScheduleTable() {
       const tableBody = document.querySelector('#schedule-table tbody');
       tableBody.innerHTML = '';
-      
-      upcomingEvents.forEach(event => {
+      upcomingEvents.forEach(ev => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${event.name}</td>
-          <td>${formatDate(event.date)}</td>
-          <td>${event.time}</td>
-          <td>${event.first} pts</td>
-          <td>${event.second} pts</td>
-          <td>${event.third} pts</td>
-          <td>${event.participation} pts</td>
+          <td>${ev.name}</td>
+          <td>${ev.first}</td>
+          <td>${ev.second}</td>
+          <td>${ev.third}</td>
         `;
         tableBody.appendChild(row);
       });
     }
-    
-    // Initialize tables on page load
-    updateEventsTable();
+
+    // New: Display a rank table based on current scores
+    function updateRankTable() {
+      // Pair each team with its score
+      const teamScorePairs = teamNames.map((name, i) => ({ name, score: scores[i] }));
+      // Sort descending by score
+      teamScorePairs.sort((a, b) => b.score - a.score);
+
+      const rankBody = document.querySelector('#rank-table tbody');
+      rankBody.innerHTML = '';
+
+      teamScorePairs.forEach((pair, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${pair.name}</td>
+          <td>${pair.score}</td>
+        `;
+        rankBody.appendChild(row);
+      });
+    }
+
+    // On page load:
+    updateRankTable();
+    updateCompletedEventsTable();
     populateScheduleTable();
   </script>
 </body>
