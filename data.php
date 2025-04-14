@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// If it’s a GET request, simply read and output the content of data.json.
+// For a GET request, simply output the content of data.json.
 if (file_exists($dataFile)) {
     echo file_get_contents($dataFile);
 } else {
